@@ -14,10 +14,12 @@ const formattedDate = new Intl.DateTimeFormat('en-US', options).format(now);
  const randomNumber = Math.floor(Math.random() * stoicGratitudeEnthusiasmQuotes.length);
 
 function Header() {
-    const {loggedIn, setLogin, setJournalWriter, journalWriter} = useContext(signInContext);
+    const {showEntryForm, setShowEntryForm, loggedIn, signInResult, setSignInResult, setLogin, setJournalWriter, journalWriter, setShowLoginForm, setShowSignUpForm, setShowBackButton, showSignUpForm, showLoginForm, showBackButton} = useContext(signInContext);
+    
     const [quote, setQuote] = useState(stoicGratitudeEnthusiasmQuotes[randomNumber]);
+    
     const quoteIndex = dayOfYear - 1;
-
+console.log(loggedIn + " !!!!!!!!!!!!!!!!!!!!!!!!")
 
     useEffect(() => {
     if (dayOfYear < 61) {
@@ -38,7 +40,16 @@ function Header() {
   
 console.log(journalWriter)
 
-
+function logUserOut(){
+    setLogin(false)
+    setJournalWriter('')
+    console.log("logout")
+    setSignInResult('')
+    //setShowLoginForm(true)
+    setShowEntryForm(false)
+    //setShowSignUpForm(true)
+    //setShowBackButton(true)
+}
 
   return (
     <>
@@ -49,7 +60,7 @@ console.log(journalWriter)
                 <p>{formattedDate}</p>
             </div>
         <h1>Journal</h1>
-        <button className = 'logOut'>Log Out</button>
+       { loggedIn ? <button onClick = {logUserOut} className = 'logOut'>Log Out</button> : null }
         </div>
  
         <p>{quote}</p>

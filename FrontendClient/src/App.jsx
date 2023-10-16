@@ -11,13 +11,20 @@ function App() {
  
   const [loggedIn, setLogin] = useState(false)
   const [journalWriter, setJournalWriter] = useState('')
-  const [showLogOutButton, setShowLogOutButton] = useState(false)
+  const [showBackButton, setShowBackButton] = useState(false)
+const [showSignUpForm, setShowSignUpForm] = useState(false)
+const [showLoginForm, setShowLoginForm] =useState(false)
+const [signInResult, setSignInResult] = useState('')
+const [showEntryForm, setShowEntryForm] = useState(false);
 
+
+
+  
   return (
     <>
     <div className='body'>
     
-    <signInContext.Provider value={{loggedIn, setLogin, journalWriter, setJournalWriter}}>
+    <signInContext.Provider value={{signInResult, setSignInResult, showEntryForm, setShowEntryForm, loggedIn, setLogin, journalWriter, setJournalWriter,  setShowLoginForm, setShowSignUpForm,  setShowBackButton,  showSignUpForm,  showLoginForm,  showBackButton }}>
     <Header  />
     <div style={{ display: loggedIn ? 'none' : 'block' }}> <Entry /> </div>
     <div style={{ display: loggedIn ? 'block' : 'none' }}>

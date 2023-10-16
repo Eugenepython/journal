@@ -4,20 +4,22 @@ import { signInContext } from "../Components/MyContexts";
 
 function Entry() {
     
-const {loggedIn, setLogin, journalWriter, setJournalWriter} = useContext(signInContext);
-const [showEntryForm, setShowEntryForm] = useState(false);
+
+const {showEntryForm, setShowEntryForm, loggedIn, signInResult, setSignInResult, setLogin, setJournalWriter, journalWriter, setShowLoginForm, setShowSignUpForm, setShowBackButton, showSignUpForm, showLoginForm, showBackButton} = useContext(signInContext);
+
 const [userInput, setUserInput] = useState('')
 const [passwordInput, setPasswordInput] = useState('')
-const [showBackButton, setShowBackButton] = useState(false)
-const [signIn, setSignIn] = useState(false)
-const [showSignUpForm, setShowSignUpForm] = useState(false)
+//const [showBackButton, setShowBackButton] = useState(false)
+//const [signIn, setSignIn] = useState(false)
+//const [showSignUpForm, setShowSignUpForm] = useState(false)
 const [firstPassInput, setFirstPassInput] = useState('')
 const [secondPassInput, setSecondPassInput] = useState('')
 const [newUserInput, setNewUserInput] = useState('')
-const [showLoginForm, setShowLoginForm] =useState(false)
+//const [showLoginForm, setShowLoginForm] =useState(false)
 const [signUpResult, setSignUpResult] = useState(null)
-const [signInResult, setSignInResult] = useState(null)
+//const [signInResult, setSignInResult] = useState(null)
 const [token, setToken] = useState(null)
+
 
 
 
@@ -34,7 +36,6 @@ function goBacktoEnter(){
   setSecondPassInput('')
 }
     
-
 
 function revealSignIn(){
     setShowEntryForm(true)
@@ -101,13 +102,13 @@ async function handleSubmitSignIn(event){
       return
     }
     if (data.message === 'You are logged in') {
-      setSignInResult('You are logged in as ' + data.username)
+      //setSignInResult('You are logged in as ' + data.username)
       setShowLoginForm(false)
       console.log(data.token)
       setToken(data.token)
       setJournalWriter(data.username)
       setShowBackButton(false)
-      setShowLogOutButton(true)
+      setLogin(true)
       return
     }
 } catch (error) {
