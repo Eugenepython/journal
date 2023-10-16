@@ -7,6 +7,10 @@ const now = new Date();
 const startOfYear = new Date(now.getFullYear(), 0, 0);
 const dayOfYear = Math.floor((now - startOfYear) / 86400000); 
 
+const options = { year: 'numeric', month: 'long', day: 'numeric' };
+const formattedDate = new Intl.DateTimeFormat('en-US', options).format(now);
+
+
  const randomNumber = Math.floor(Math.random() * stoicGratitudeEnthusiasmQuotes.length);
 
 function Header() {
@@ -39,9 +43,16 @@ console.log(journalWriter)
   return (
     <>
     <div className = 'header'>
-    <h1>Journal Entry</h1>
-    <p>{journalWriter}</p>
-    <p>{quote}</p>
+        <div className = 'title'>
+            <div className = 'dateAndName'>
+                <p>{journalWriter}</p>
+                <p>{formattedDate}</p>
+            </div>
+        <h1>Journal</h1>
+        <button className = 'logOut'>Log Out</button>
+        </div>
+ 
+        <p>{quote}</p>
 
     </div>
     </>

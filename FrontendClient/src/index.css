@@ -7,18 +7,7 @@
   min-height: 100vh;
 }
 
-.header, .plan, .recap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-  flex: 1;
-  width: 100%;
-  overflow: auto; 
-  max-height: 33vh; 
-  min-height: 33vh;
-}
+
 
 .header {
   background-color: red;
@@ -96,4 +85,41 @@
   color: #fff;
   border: none;
   text-align: center;
+}
+
+.header, .plan, .recap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1rem;
+  color: white;
+  flex: 1;
+  width: 100%;
+  overflow: auto; 
+  max-height: 33vh; 
+  min-height: 33vh;
+}
+
+.title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-color: black;
+  width: 90%;
+}
+
+.logOut{
+  background-color: yellow;
+  color: white;
+  border: none;
+  padding: 1rem;
+  cursor: pointer;
+  margin-right: 0;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.dateAndName{
+  display: flex;
+  flex-direction: column;
 }
