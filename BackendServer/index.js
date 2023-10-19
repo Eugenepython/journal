@@ -55,7 +55,7 @@ app.post('/signup', (req, res) => {
   pool.query('SELECT * FROM users WHERE username = $1', [username], (err, result) => {
     if (err) {
       console.error('Error executing query:', err);
-      res.status(500).json({ message: 'Database query error', err });
+      res.status(500).json({ message : err });
     } else {
       if (result.rows.length > 0) {
         res.status(409).json(userExists);
