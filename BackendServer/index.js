@@ -18,8 +18,7 @@ const pool = new Pool({
 });
 
 const frontendURL = process.env.FRONTEND_URL;
-
-
+console.log(frontendURL)
 
 app.use(
   cors({
@@ -28,8 +27,6 @@ app.use(
     credentials: true,
   })
 );
-
-
 
 
 
@@ -58,7 +55,7 @@ app.post('/signup', (req, res) => {
   pool.query('SELECT * FROM users WHERE username = $1', [username], (err, result) => {
     if (err) {
       console.error('Error executing query:', err);
-      res.status(500).json({ message: 'Database query error' });
+      res.status(500).json({ message: 'Database query error', err });
     } else {
       if (result.rows.length > 0) {
         res.status(409).json(userExists);
