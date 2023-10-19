@@ -14,12 +14,12 @@ const formattedDate = new Intl.DateTimeFormat('en-US', options).format(now);
  const randomNumber = Math.floor(Math.random() * stoicGratitudeEnthusiasmQuotes.length);
 
 function Header() {
-    const {showEntryForm, setShowEntryForm, loggedIn, signInResult, setSignInResult, setLogin, setJournalWriter, journalWriter, setShowLoginForm, setShowSignUpForm, setShowBackButton, showSignUpForm, showLoginForm, showBackButton} = useContext(signInContext);
+    const {token, setToken, showEntryForm, setShowEntryForm, loggedIn, signInResult, setSignInResult, setLogin, setJournalWriter, journalWriter, setShowLoginForm, setShowSignUpForm, setShowBackButton, showSignUpForm, showLoginForm, showBackButton} = useContext(signInContext);
     
     const [quote, setQuote] = useState(stoicGratitudeEnthusiasmQuotes[randomNumber]);
     
     const quoteIndex = dayOfYear - 1;
-console.log(loggedIn + " !!!!!!!!!!!!!!!!!!!!!!!!")
+//console.log(loggedIn + " !!!!!!!!!!!!!!!!!!!!!!!!")
 
     useEffect(() => {
     if (dayOfYear < 61) {
@@ -38,13 +38,14 @@ console.log(loggedIn + " !!!!!!!!!!!!!!!!!!!!!!!!")
     }, [dayOfYear]);
 
   
-console.log(journalWriter)
+//console.log(journalWriter)
 
 function logUserOut(){
     setLogin(false)
     setJournalWriter('')
-    console.log("logout")
+    //console.log("logout")
     setSignInResult('')
+    //setToken(null)
     //setShowLoginForm(true)
     setShowEntryForm(false)
     //setShowSignUpForm(true)

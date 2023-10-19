@@ -5,7 +5,8 @@ import { signInContext } from "../Components/MyContexts";
 function Entry() {
     
 
-const {showEntryForm, setShowEntryForm, loggedIn, signInResult, setSignInResult, setLogin, setJournalWriter, journalWriter, setShowLoginForm, setShowSignUpForm, setShowBackButton, showSignUpForm, showLoginForm, showBackButton} = useContext(signInContext);
+const {token, setToken, showEntryForm, setShowEntryForm, loggedIn, signInResult, setSignInResult, setLogin, setJournalWriter, journalWriter, setShowLoginForm, setShowSignUpForm, setShowBackButton, showSignUpForm, showLoginForm, showBackButton} = useContext(signInContext);
+
 
 const [userInput, setUserInput] = useState('')
 const [passwordInput, setPasswordInput] = useState('')
@@ -18,8 +19,6 @@ const [newUserInput, setNewUserInput] = useState('')
 //const [showLoginForm, setShowLoginForm] =useState(false)
 const [signUpResult, setSignUpResult] = useState(null)
 //const [signInResult, setSignInResult] = useState(null)
-const [token, setToken] = useState(null)
-
 
 
 
@@ -75,10 +74,13 @@ function getSecondPassInput(event){
   setSecondPassInput(event.target.value)
 }
 
+const serverURL = import.meta.env.VITE_BACKEND_API_URL
+//console.log(serverURL)
+
 async function handleSubmitSignIn(event){
   event.preventDefault()
-  console.log(userInput)
-  console.log(passwordInput)
+  //console.log(userInput)
+  //console.log(passwordInput)
   setUserInput('')
   setPasswordInput('')
   try {
@@ -91,8 +93,8 @@ async function handleSubmitSignIn(event){
         console.log(response);
     }
     const data = await response.json();
-    console.log('Data:', data);
-    console.log(data.message)
+    //console.log('Data:', data);
+    //console.log(data.message)
     if (data.message === 'No such user exists') {
       setSignInResult('No such user exists')
       return
@@ -116,14 +118,14 @@ async function handleSubmitSignIn(event){
 }
 }
 
-const serverURL = import.meta.env.VITE_BACKEND_API_URL
+
 
 
 async function handleSubmitSignUp(event){
   event.preventDefault()
-  console.log(newUserInput)
-  console.log(firstPassInput)
-  console.log(secondPassInput)
+  //console.log(newUserInput)
+  //console.log(firstPassInput)
+  //console.log(secondPassInput)
   if(newUserInput === '' || firstPassInput === '' || secondPassInput === ''){
     setSignUpResult('please fill out all fields')
     return

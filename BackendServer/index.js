@@ -14,7 +14,7 @@ const pool = new Pool({
   database: process.env.DB_DATABASE,
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
-  database_url: process.env.DATABASE_URL,
+  DATABASE_URL: process.env.DATABASE_URL,
 });
 
 
@@ -71,7 +71,6 @@ app.post('/signup', (req, res) => {
 
 
 app.post('/login', (req, res) => {
-  
   const username = req.body.username;
   const password = req.body.password;
   const payload = {username : username};
@@ -104,6 +103,31 @@ app.post('/login', (req, res) => {
     }
   })
 });
+
+
+app.post('/morningplan', (req, res) => {
+  console.log(req.body)
+  const username = req.body.journalWriter;
+  const message = req.body.morningMessage;
+  pool.query('SELECT * FROM users WHERE username = $1', [username], (err, result) => {
+    if (err) {
+      console.error('Error executing query:', err);
+     res.status(500).json({ message: 'Database query error' });
+    } else if (result.rows.length > 0) {
+      const user_id = result.rows[0].user_id;
+      pool.query('INSERT INTO morningplan (user_id, date, message) VALUES ($1, $2, $3)', 
+      [user_id, new Date(), message], (err, result) => {
+        if (err) {
+          console.error('Error executing query:', err);
+          res.status(500).json({ message: 'Database query error' });
+        } else {
+          res.status(201).json({ message: username });
+        }
+      }); 
+    }
+  })
+});
+
 
 
 
