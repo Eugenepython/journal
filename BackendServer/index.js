@@ -3,7 +3,7 @@ const app = express();
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-app.use(express.json()); // This middleware parses JSON request bodies
+app.use(express.json()); 
 const { Pool } = require('pg');
 const secretKey = 'billmaherandtommylee'
 console.log(process.env.FRONTEND_URL)
@@ -17,14 +17,21 @@ const pool = new Pool({
   DATABASE_URL: process.env.DATABASE_URL,
 });
 
-
-const corsOptions = {
-  origin: process.env.FRONTEND_URL,
-  optionsSuccessStatus: 200, 
-};
+const frontendURL = process.env.FRONTEND_URL;
 
 
-app.use(cors(corsOptions));
+
+app.use(
+  cors({
+    origin: [frontendURL],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  })
+);
+
+
+
+
 
 app.get('/', (req, res) => {
     const responseData = {
