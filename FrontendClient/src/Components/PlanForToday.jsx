@@ -15,20 +15,28 @@ const {morningMessage, setMorningMessage, confirmedMessage, setConfirmedMessage}
 function openMyPlan() {
     setOpenPlan(true);
     }
-//console.log(openPlan + ' open Plan in plan for tdoay parent')
 
 function closePlan(){
   setOpenPlan(false);
  // setMorningMessage('')
   }
+//console.log(confirmedMessage )
+
+
+
 
   return (
     <>
     <div className = 'plan'>
+    <div className = 'planTitle'>
     <div className = 'heading'>What are you going to do today?</div>
-
     <div className = 'buttonHolder'><button className = 'submitmorning' onClick = {openMyPlan}>Write your Plan</button></div>
-    <div className = 'planMessage'>{confirmedMessage}</div>
+    </div>
+    <div className="planMessage" style={{ whiteSpace: 'pre-wrap' }}>
+    {confirmedMessage}
+    </div>
+
+
  
     <MorningPlan 
      openPlan={openPlan}

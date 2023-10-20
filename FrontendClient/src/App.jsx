@@ -22,10 +22,6 @@ const [morningMessage, setMorningMessage] = useState('')
 const [confirmedMessage, setConfirmedMessage] = useState('')
 
   
-
-
-
-
   return (
     <>
     <div className='body'>

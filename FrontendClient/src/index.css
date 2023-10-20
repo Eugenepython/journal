@@ -7,18 +7,69 @@
   min-height: 100vh;
 }
 
-
+.header, .plan, .recap {
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  color: white;
+  flex: 1;
+  width: 100%;
+  overflow: auto; 
+}
 
 .header {
   background-color: red;
+  max-height: 20vh; 
+  min-height: 20vh;
+  margin: 2px;
 }
 
 .plan {
   background-color: blue;
+  max-height: 40vh; 
+  min-height: 40vh;
 }
 
 .recap {
   background-color: yellow;
+  max-height: 40vh; 
+  min-height: 40vh;
+}
+
+.journalWriter {
+  font-size: 18px; 
+  font-weight: bold; 
+  color: #3a6379;
+  margin: 0; 
+  padding-left: 10px; 
+  padding-top: 5px;
+}
+
+.date {
+  font-size: 18px; 
+  font-weight: bold; 
+  color: #360f2a;
+  margin: 0; 
+  padding-left: 10px; 
+  padding-top: 5px;
+}
+
+.headTitle {
+  font-size: 30px; 
+  font-weight: bold; 
+  color: #0b350e;
+  margin: 0; 
+  padding: 10px; 
+}
+
+.logOut{
+  background-color: yellow;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+  font-size: 15px;
+  
 }
 
 .forms {
@@ -87,36 +138,45 @@
   text-align: center;
 }
 
-.header, .plan, .recap {
-  display: flex;
-  flex-direction: column;
-  font-size: 1rem;
-  color: white;
-  flex: 1;
-  width: 100%;
-  overflow: auto; 
-  max-height: 33vh; 
-  min-height: 33vh;
+
+
+.saveMorning {
+  background-color: #4CAF50; 
+  color: white; 
+  border: none; 
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 10px 2px;
+  cursor: pointer; 
+  border-radius: 4px; 
 }
+
+
+.saveMorning:hover {
+  background-color: #45a049; 
+}
+
+
+.saveMorning:active {
+  background-color: #3e874e; 
+}
+
+.saveMorning:disabled {
+  background-color: #d1d1d1; 
+  cursor: not-allowed; 
+}
+
 
 .title {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  border-color: black;
-  width: 90%;
+ 
 }
 
-.logOut{
-  background-color: yellow;
-  color: white;
-  border: none;
-  padding: 1rem;
-  cursor: pointer;
-  margin-right: 0;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
-}
 
 .dateAndName{
   display: flex;
@@ -131,7 +191,6 @@
   display: flex;
   flex-direction: column;
   margin: 1rem;
-  border-style: dotted;
   text-align: center;
   font-family: 'Tintin', sans-serif;
 }
@@ -150,36 +209,43 @@
   font-size: 30px;
 }
 
-.heading {
-  font-size: 20px;
-  border-style:dotted;
-  text-align:center;
+.planTitle {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
 }
 
-.planMessage {
-  border-style:dotted;
-  margin-left: 0;
+.heading {
+  font-size: 20px;
+  text-align:center;
+  margin-left: 10px;
 }
 
 .buttonHolder {
-  text-align: center;
+  margin-right: 10px;
 }
 
+
+
+.planMessage {
+  margin-left: 3px;
+}
+
+
+
 .submitmorning {
- 
   padding: 12px 24px;
   font-size: 16px;
   font-weight: bold;
   text-align: center;
   text-decoration: none;
-  border-style:dotted;
-  border-radius: 5px;
+
   background-color: #3498db; 
   color: #fff; 
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
   width: 220px;
-  
 }
 
 .submitmorning:hover {

@@ -15,7 +15,6 @@ setMorningMessage(event.target.value)
 }
 
 
-
 async function saveMorning() {
   setConfirmedMessage(morningMessage);
   closePlan();
@@ -37,7 +36,12 @@ async function saveMorning() {
   }
 }
 
-
+function handleKeyPress(event){
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    setMorningMessage(morningMessage + '\n');
+  }
+}
 
 //console.log(openPlan + ' open Plan in plan for morning chid')
 
@@ -51,17 +55,18 @@ async function saveMorning() {
           contentLabel="Custom Modal"
         >
           <div className = 'inputField'>
-          <label htmlFor="myTextArea" className = 'titleInput'>What are you doing to do today?</label>
+          <label htmlFor="myTextArea" className = 'titleInput'>WHAT ARE YOU GOING TO DO TODAY?</label>
           <textarea
             className = 'textarea'
             id="myTextArea"
             name="myTextArea"
             value={morningMessage}
             onChange={handleTextChange}
+            onKeyDown={handleKeyPress}
             rows="20"
             cols="50"
           ></textarea>
-          <button onClick ={saveMorning}>Save</button>
+          <button className = 'saveMorning' onClick ={saveMorning}>Save</button>
           </div>
           <button onClick = {closePlan} >Close this Modal</button>
           </Modal>

@@ -1,12 +1,12 @@
 import { useEffect, useState, useContext,  } from 'react'
-import { signInContext } from "../Components/MyContexts";
+import { signInContext, morningContext } from "../Components/MyContexts";
 
 
 function Entry() {
     
 
 const {token, setToken, showEntryForm, setShowEntryForm, loggedIn, signInResult, setSignInResult, setLogin, setJournalWriter, journalWriter, setShowLoginForm, setShowSignUpForm, setShowBackButton, showSignUpForm, showLoginForm, showBackButton} = useContext(signInContext);
-
+const {setConfirmedMessage} = useContext(morningContext);
 
 const [userInput, setUserInput] = useState('')
 const [passwordInput, setPasswordInput] = useState('')
@@ -111,6 +111,8 @@ async function handleSubmitSignIn(event){
       setJournalWriter(data.username)
       setShowBackButton(false)
       setLogin(true)
+      //console.log(data.morningMessage)
+      setConfirmedMessage(data.morningMessage)
       return
     }
 } catch (error) {

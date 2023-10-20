@@ -85,10 +85,11 @@ app.post('/login', (req, res) => {
   const wrongPassword = {
       message: 'Wrong password'
   };
-  const success = {
+  let success = {
       message: 'You are logged in',
       username: username,
-      token: token
+      token: token,
+      morningMessage: ''
   }
   console.log(username)
   console.log(password)
@@ -102,11 +103,24 @@ app.post('/login', (req, res) => {
         } else if (result.rows.length > 0 && result.rows[0].password !== password) {
           res.status(409).json(wrongPassword);
         } else {
-          res.status(200).json(success);
+          const user_id = result.rows[0].user_id;
+          pool.query('SELECT * FROM morningplan WHERE user_id = $1', [user_id], (err, result) => {
+            if (err) {
+              console.error('Error executing query:', err);
+              res.status(500).json({ message: 'Database query error' });
+            } else {
+              console.log("?????????????????????????????????")
+              console.log(result.rows[0].message);
+              let arrayLength = result.rows.length
+              success.morningMessage = result.rows[arrayLength-1].message;
+              console.log(success)
+              res.status(200).json(success);
+            }
+          });
         }
-    }
-  })
-});
+      }
+    });
+  });
 
 
 app.post('/morningplan', (req, res) => {

@@ -56,12 +56,12 @@ function logUserOut(){
     <>
     <div className = 'header'>
         <div className = 'title'>
-            <div className = 'dateAndName'>
-                <p>{journalWriter}</p>
-                <p>{formattedDate}</p>
-            </div>
-        <h1>Journal</h1>
-       { loggedIn ? <button onClick = {logUserOut} className = 'logOut'>Log Out</button> : null }
+                <div className = 'dateAndName'>
+                    <p className = 'journalWriter'>{journalWriter}</p>
+                    <p className = 'date'>{formattedDate}</p>
+                </div>
+                <p className = 'headTitle'>Journal</p>
+                { loggedIn ? <button onClick = {logUserOut} className = 'logOut'>Log Out</button> : null }
         </div>
  
         <p>{quote}</p>
