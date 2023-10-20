@@ -14,7 +14,6 @@ function handleTextChange(event){
 setMorningMessage(event.target.value)
 }
 
-
 async function saveMorning() {
   setConfirmedMessage(morningMessage);
   closePlan();
