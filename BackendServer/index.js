@@ -6,6 +6,10 @@ require('dotenv').config();
 app.use(express.json()); 
 const { Pool } = require('pg');
 const secretKey = 'billmaherandtommylee'
+const bcrypt = require('bcryptjs');
+const saltRounds = 10;
+
+
 console.log(process.env.FRONTEND_URL)
 
 const pool = new Pool({
@@ -45,10 +49,12 @@ app.get('/hello', (req, res) => {
   res.json(responseData);
 });
 
+
 app.post('/signup', (req, res) => {
   console.log(req.body.username)
   const username = req.body.username;
-  const password = req.body.password;
+  let originalPassword = req.body.password;
+  let password ='';
   const userExists = {
       message: username + ' already in system'
   };
@@ -60,23 +66,40 @@ app.post('/signup', (req, res) => {
       if (result.rows.length > 0) {
         res.status(409).json(userExists);
       } else {
-        pool.query('INSERT INTO users (username, password) VALUES ($1, $2)', [username, password], (err, result) => {
-          if (err) {
-            console.error('Error executing query:', err);
-            res.status(500).json({ message: 'Database query error' });
-          } else {
-            res.status(201).json({ message: username });
-          }
-        }); 
+            bcrypt.genSalt(saltRounds, function(err, salt) {
+              if (err) {
+                console.error('Error generating salt:', err);
+              } else {
+                bcrypt.hash(originalPassword, salt, function(err, hash) {
+                  if (err) {
+                    console.error('Error hashing password:', err);
+                  } else {
+                    password = hash;
+                    pool.query('INSERT INTO users (username, password) VALUES ($1, $2)', [username, password], (err, result) => {
+                      if (err) {
+                        console.error('Error executing query:', err);
+                        res.status(500).json({ message: 'Database query error' });
+                      } else {
+                        res.status(201).json({ message: username });
+                        console.log('hashed password : ' + password)
+                    }
+                    }); 
+                  }
+                });
+              }
+            });
       }
     }
   });
-});
+})
+
+
 
 
 app.post('/login', (req, res) => {
   const username = req.body.username;
-  const password = req.body.password;
+  let originalPassword = req.body.password;
+  let password ='';
   const payload = {username : username};
   const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
   const noSuchUser = {
@@ -98,29 +121,42 @@ app.post('/login', (req, res) => {
       console.error('Error executing query:', err);
      res.status(500).json({ message: 'Database query error' });
     } else {
-        if (result.rows.length < 1) {
-          res.status(409).json(noSuchUser);
-        } else if (result.rows.length > 0 && result.rows[0].password !== password) {
-          res.status(409).json(wrongPassword);
-        } else {
-          const user_id = result.rows[0].user_id;
-          pool.query('SELECT * FROM morningplan WHERE user_id = $1', [user_id], (err, result) => {
+
+        bcrypt.genSalt(saltRounds, function(err, salt) {
+          if (err) {
+            console.error('Error generating salt:', err);
+          } else {
+            bcrypt.hash(originalPassword, salt, function(err, hash) {
             if (err) {
-              console.error('Error executing query:', err);
-              res.status(500).json({ message: 'Database query error' });
+              console.error('Error hashing password:', err);
             } else {
-              console.log("?????????????????????????????????")
-              console.log(result.rows[0].message);
-              let arrayLength = result.rows.length
-              success.morningMessage = result.rows[arrayLength-1].message;
-              console.log(success)
-              res.status(200).json(success);
-            }
-          });
+                password = hash;
+                if (result.rows.length < 1) {
+                res.status(409).json(noSuchUser);
+              } else if (result.rows.length > 0 && result.rows[0].password !== password) {
+                res.status(409).json(wrongPassword);
+              } else {
+                const user_id = result.rows[0].user_id;
+                pool.query('SELECT * FROM morningplan WHERE user_id = $1', [user_id], (err, result) => {
+                if (err) {
+                console.error('Error executing query:', err);
+                res.status(500).json({ message: 'Database query error' });
+              } else {
+                console.log(result.rows[0].message);
+                let arrayLength = result.rows.length
+                success.morningMessage = result.rows[arrayLength-1].message;
+                console.log(success)
+                res.status(200).json(success);
+              }
+            });
+          }
         }
-      }
-    });
+      });
+    }
   });
+}
+});
+});
 
 
 app.post('/morningplan', (req, res) => {
