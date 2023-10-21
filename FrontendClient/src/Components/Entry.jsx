@@ -4,7 +4,6 @@ import { signInContext, morningContext } from "../Components/MyContexts";
 
 function Entry() {
     
-
 const {token, setToken, showEntryForm, setShowEntryForm, loggedIn, signInResult, setSignInResult, setLogin, setJournalWriter, journalWriter, setShowLoginForm, setShowSignUpForm, setShowBackButton, showSignUpForm, showLoginForm, showBackButton} = useContext(signInContext);
 const {setConfirmedMessage} = useContext(morningContext);
 
@@ -104,7 +103,7 @@ async function handleSubmitSignIn(event){
       return
     }
     if (data.message === 'You are logged in') {
-      //setSignInResult('You are logged in as ' + data.username)
+      setSignInResult('You are logged in as ' + data.username)
       setShowLoginForm(false)
       console.log(data.token)
       setToken(data.token)
