@@ -225,7 +225,7 @@ app.post('/eveningdone', (req, res) => {
 
 app.post('/memories', (req, res) => {
   const user_id = req.body.theId;
-  pool.query('SELECT * FROM memories WHERE user_id = $1', [user_id], (err, result) => {
+  pool.query('SELECT * FROM memories WHERE memories.user_id = $1', [user_id], (err, result) => {
     if (err) {
       console.error('Error executing query:', err);
       res.status(500).json({ message: 'Database query error' });
