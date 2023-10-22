@@ -4,11 +4,14 @@ import PlanForToday from './Components/PlanForToday'
 import Recap from './Components/Recap'
 import Entry from './Components/Entry'
 import MorningModal from './Modals/MorningModal'
-import {signInContext, morningContext} from './Components/MyContexts'
+import {signInContext, morningContext, eveningContext} from './Components/MyContexts'
+import WhatDoneToday from './Components/WhatDoneToday'
+import EveningModal from './Modals/EveningModal'
 
 
 
 function App() {
+
  
   const [loggedIn, setLogin] = useState(false)
   const [journalWriter, setJournalWriter] = useState('')
@@ -20,14 +23,18 @@ const [showEntryForm, setShowEntryForm] = useState(false);
 const [token, setToken] = useState(null)
 const [morningMessage, setMorningMessage] = useState('')
 const [confirmedMessage, setConfirmedMessage] = useState('')
-
+const [eveningMessage, setEveningMessage] = useState('')
+const [confirmedEveningMessage, setConfirmedEveningMessage] = useState('')
+const [theId, setTheId] = useState('')
   
   return (
     <>
     <div className='body'>
-    
+    <eveningContext.Provider value = {{confirmedEveningMessage, setConfirmedEveningMessage, eveningMessage, setEveningMessage}}>
     <morningContext.Provider value = {{morningMessage, setMorningMessage, confirmedMessage, setConfirmedMessage}}>
     <signInContext.Provider value={{
+        theId, 
+        setTheId,
         token,
         setToken, 
         signInResult, 
@@ -50,12 +57,15 @@ const [confirmedMessage, setConfirmedMessage] = useState('')
     <div style={{ display: loggedIn ? 'block' : 'none' }}>
     <MorningModal />
     <PlanForToday  />
-    <Recap />
+    <EveningModal />
+    <WhatDoneToday />
+    
     </div>
 
 
     </signInContext.Provider>
     </morningContext.Provider>
+    </eveningContext.Provider>
 
     </div>
     </>

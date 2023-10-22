@@ -42,7 +42,7 @@ function handleKeyPress(event){
   }
 }
 
-//console.log(openPlan + ' open Plan in plan for morning chid')
+
 
   return (
     <>
@@ -69,7 +69,6 @@ function handleKeyPress(event){
           </div>
           <button onClick = {closePlan} >Close this Modal</button>
           </Modal>
-
     </div>
     </>
   )

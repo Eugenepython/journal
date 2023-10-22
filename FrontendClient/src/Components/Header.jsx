@@ -10,11 +10,11 @@ const dayOfYear = Math.floor((now - startOfYear) / 86400000);
 const options = { year: 'numeric', month: 'long', day: 'numeric' };
 const formattedDate = new Intl.DateTimeFormat('en-US', options).format(now);
 
-
  const randomNumber = Math.floor(Math.random() * stoicGratitudeEnthusiasmQuotes.length);
+ const serverURL = import.meta.env.VITE_BACKEND_API_URL
 
 function Header() {
-    const {token, setToken, showEntryForm, setShowEntryForm, loggedIn, signInResult, setSignInResult, setLogin, setJournalWriter, journalWriter, setShowLoginForm, setShowSignUpForm, setShowBackButton, showSignUpForm, showLoginForm, showBackButton} = useContext(signInContext);
+    const {theId, setTheId, token, setToken, showEntryForm, setShowEntryForm, loggedIn, signInResult, setSignInResult, setLogin, setJournalWriter, journalWriter, setShowLoginForm, setShowSignUpForm, setShowBackButton, showSignUpForm, showLoginForm, showBackButton} = useContext(signInContext);
     
     const [quote, setQuote] = useState(stoicGratitudeEnthusiasmQuotes[randomNumber]);
     
@@ -22,23 +22,25 @@ function Header() {
 //console.log(loggedIn + " !!!!!!!!!!!!!!!!!!!!!!!!")
 
     useEffect(() => {
-    if (dayOfYear < 61) {
-        setQuote(stoicGratitudeEnthusiasmQuotes[quoteIndex]);
-    } else if (dayOfYear > 61 && dayOfYear < 121) {
-        setQuote(stoicGratitudeEnthusiasmQuotes[quoteIndex - 61]);
-    } else if (dayOfYear > 121 && dayOfYear < 182) {
-        setQuote(stoicGratitudeEnthusiasmQuotes[quoteIndex - 121]);
-    } else if (dayOfYear > 182 && dayOfYear < 243) {
-        setQuote(stoicGratitudeEnthusiasmQuotes[quoteIndex - 182]);
-    } else if (dayOfYear > 243 && dayOfYear < 304) {
-        setQuote(stoicGratitudeEnthusiasmQuotes[quoteIndex - 243]);
-    } else if (dayOfYear > 304 && dayOfYear < 367) {
-        setQuote(stoicGratitudeEnthusiasmQuotes[quoteIndex - 304]);
-    }
-    }, [dayOfYear]);
+    if (dayOfYear < 51) {
+        setQuote(stoicGratitudeEnthusiasmQuotes[dayOfYear - 1]);
+    } else if (dayOfYear > 51 && dayOfYear < 101) {
+        setQuote(stoicGratitudeEnthusiasmQuotes[dayOfYear - 51]);
+    } else if (dayOfYear > 101 && dayOfYear < 151) {
+        setQuote(stoicGratitudeEnthusiasmQuotes[dayOfYear - 101]);
+    } else if (dayOfYear > 151 && dayOfYear < 201) {
+        setQuote(stoicGratitudeEnthusiasmQuotes[dayOfYear - 151]);
+    } else if (dayOfYear > 201 && dayOfYear < 251) {
+        setQuote(stoicGratitudeEnthusiasmQuotes[dayOfYear - 201]);
+    } else if (dayOfYear > 251 && dayOfYear < 301) {
+        setQuote(stoicGratitudeEnthusiasmQuotes[dayOfYear - 251]);
+    } else if (dayOfYear > 301 && dayOfYear < 351) {
+        setQuote(stoicGratitudeEnthusiasmQuotes[dayOfYear - 301]);
+    } else if (dayOfYear > 351 && dayOfYear < 366) {
+    setQuote(stoicGratitudeEnthusiasmQuotes[dayOfYear - 351]);
+}
+}, [dayOfYear]);
 
-  
-//console.log(journalWriter)
 
 function logUserOut(){
     setLogin(false)
@@ -52,6 +54,30 @@ function logUserOut(){
     //setShowBackButton(true)
 }
 
+async function showHistory(){
+        try {
+          const response = await fetch(`${serverURL}/memories`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({theId}), 
+          });
+          if (!response.ok) {
+            console.log('error')
+          } else {
+            const data = await response.json();
+            console.log(data);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }
+
+
+
+
+
+
+
   return (
     <>
     <div className = 'header'>
@@ -61,7 +87,12 @@ function logUserOut(){
                     <p className = 'date'>{formattedDate}</p>
                 </div>
                 <p className = 'headTitle'>Journal</p>
-                { loggedIn ? <button onClick = {logUserOut} className = 'logOut'>Log Out</button> : null }
+                { loggedIn ? 
+                <div className = 'logOutAndHistory'>
+                    <button onClick = {logUserOut} className = 'logOut'>Log Out</button> 
+                    <button onClick = {showHistory} className = 'history'>History</button>
+                </div>
+                : null }
         </div>
  
         <p>{quote}</p>

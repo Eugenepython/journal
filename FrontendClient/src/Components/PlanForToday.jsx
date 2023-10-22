@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from 'react'
 import MorningPlan from '../Modals/MorningModal'
-
+import EveningPlan from '../Modals/EveningModal'
 import { morningContext } from "../Components/MyContexts";
 
 
@@ -20,7 +20,6 @@ function closePlan(){
   setOpenPlan(false);
  // setMorningMessage('')
   }
-//console.log(confirmedMessage )
 
 
 
@@ -37,12 +36,13 @@ function closePlan(){
     </div>
 
 
- 
     <MorningPlan 
      openPlan={openPlan}
      setOpenPlan={setOpenPlan}
      closePlan={closePlan}
     />
+
+
     </div>
     </>
   )

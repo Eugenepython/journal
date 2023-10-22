@@ -1,11 +1,13 @@
 import { useEffect, useState, useContext,  } from 'react'
-import { signInContext, morningContext } from "../Components/MyContexts";
+import { signInContext, morningContext, eveningContext } from "../Components/MyContexts";
 
 
 function Entry() {
     
-const {token, setToken, showEntryForm, setShowEntryForm, loggedIn, signInResult, setSignInResult, setLogin, setJournalWriter, journalWriter, setShowLoginForm, setShowSignUpForm, setShowBackButton, showSignUpForm, showLoginForm, showBackButton} = useContext(signInContext);
-const {setConfirmedMessage} = useContext(morningContext);
+const {theId, setTheId, token, setToken, showEntryForm, setShowEntryForm, loggedIn, signInResult, setSignInResult, setLogin, setJournalWriter, journalWriter, setShowLoginForm, setShowSignUpForm, setShowBackButton, showSignUpForm, showLoginForm, showBackButton} = useContext(signInContext);
+const {setConfirmedMessage, morningMessage, setMorningMessage} = useContext(morningContext);
+const {setConfirmedEveningMessage, eveningMessage, setEveningMessage} = useContext(eveningContext);
+
 
 const [userInput, setUserInput] = useState('')
 const [passwordInput, setPasswordInput] = useState('')
@@ -112,6 +114,10 @@ async function handleSubmitSignIn(event){
       setLogin(true)
       //console.log(data.morningMessage)
       setConfirmedMessage(data.morningMessage)
+      setMorningMessage(data.morningMessage)
+      setConfirmedEveningMessage(data.eveningMessage)
+      setEveningMessage(data.eveningMessage)
+      setTheId(data.id)
       return
     }
 } catch (error) {

@@ -8,9 +8,10 @@ const { Pool } = require('pg');
 const secretKey = 'billmaherandtommylee'
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
+const cron = require('node-cron');
 
 
-console.log(process.env.FRONTEND_URL)
+//console.log(process.env.FRONTEND_URL)
 
 const pool = new Pool({
   user: process.env.DB_USER,
@@ -22,7 +23,7 @@ const pool = new Pool({
 });
 
 const frontendURL = process.env.FRONTEND_URL;
-console.log(frontendURL)
+//console.log(frontendURL)
 
 app.use(
   cors({
@@ -94,7 +95,6 @@ app.post('/signup', (req, res) => {
 })
 
 
-
 app.post('/login', (req, res) => {
   const username = req.body.username;
   let enteredPassword = req.body.password;
@@ -111,49 +111,57 @@ app.post('/login', (req, res) => {
     message: 'You are logged in',
     username: username,
     token: token,
-    morningMessage: ''
+    morningMessage: '',
+    eveningMessage: '',
+    user_id: ''
   };
-  //console.log(username);
-  //console.log(password);
-  pool.query('SELECT * FROM users WHERE username = $1', [username], (err, result) => {
+
+  pool.query('SELECT * FROM users WHERE username = $1', [username], (err, userResult) => {
     if (err) {
       console.error('Error executing query:', err);
       res.status(500).json({ message: 'Database query error' });
     } else {
-      if (result.rows.length < 1) {
+      if (userResult.rows.length < 1) {
         res.status(409).json(noSuchUser);
-      } else if (result.rows.length > 0) {
-        const hashedPassword = result.rows[0].password;
+      } else if (userResult.rows.length > 0) {
+        const hashedPassword = userResult.rows[0].password;
         bcrypt.compare(enteredPassword, hashedPassword, function (err, passwordMatch) {
           if (err) {
             console.error('Error comparing passwords:', err);
             res.status(500).json({ message: 'Password comparison error' });
           } else {
             if (passwordMatch) {
-              console.log("the passwords fucking match")
-              const user_id = result.rows[0].user_id;
-              console.log(user_id + ' is the user id')
-              pool.query('SELECT * FROM morningplan WHERE user_id = $1', [user_id], (err, result) => {
+              const user_id = userResult.rows[0].user_id;
+              success.user_id = user_id;
+              pool.query('SELECT * FROM morningplan WHERE user_id = $1', [user_id], (err, morningResult) => {
                 if (err) {
                   console.error('Error executing query:', err);
                   res.status(500).json({ message: 'Database query error' });
                 } else {
-                  if (result.rows.length > 0) {
-                    //console.log(result.rows[0]);
-                    //console.log("hsafdsdfasfasfdasfasfadsf")  
-                    let arrayLength = result.rows.length;
-                    success.morningMessage = result.rows[arrayLength - 1].message;
-                   //console.log(success);
-                   //console.log("hasdfasdfasfasfasfasfadsffds")
-                    res.status(200).json(success);
-                  } else if (result.rows.length < 1) {
-                    //console.log("hello")  
-                    //console.log(result.rows)
+                  if (morningResult.rows.length > 0) {
+                    let arrayLength = morningResult.rows.length;
+                    success.morningMessage = morningResult.rows[arrayLength - 1].message;
+                  } else {
                     success.morningMessage = '';
-                    console.log(success)
-                    res.status(200).json(success);
-
                   }
+                  // Query the eveningdone table
+                  pool.query('SELECT * FROM eveningdone WHERE user_id = $1', [user_id], (err, eveningResult) => {
+                    if (err) {
+                      console.error('Error executing query:', err);
+                      res.status(500).json({ message: 'Database query error' });
+                    } else {
+                      if (eveningResult.rows.length > 0) {
+                        let arrayLength = eveningResult.rows.length;
+                        success.eveningMessage = eveningResult.rows[arrayLength - 1].message;
+                        
+                      } else {
+                        success.eveningMessage = '';
+                      }
+                      console.log(success)
+                      console.log("this does not show up in console log")
+                      res.status(200).json(success);
+                    }
+                  });
                 }
               });
             } else {
@@ -167,8 +175,9 @@ app.post('/login', (req, res) => {
 });
 
 
+
 app.post('/morningplan', (req, res) => {
-  console.log(req.body)
+  //console.log(req.body)
   const username = req.body.journalWriter;
   const message = req.body.morningMessage;
   pool.query('SELECT * FROM users WHERE username = $1', [username], (err, result) => {
@@ -188,9 +197,104 @@ app.post('/morningplan', (req, res) => {
       }); 
     }
   })
+})
+
+
+app.post('/eveningdone', (req, res) => {
+  //console.log(req.body)
+  const username = req.body.journalWriter;
+  const message = req.body.eveningMessage;
+  pool.query('SELECT * FROM users WHERE username = $1', [username], (err, result) => {
+    if (err) {
+      console.error('Error executing query:', err);
+     res.status(500).json({ message: 'Database query error' });
+    } else if (result.rows.length > 0) {
+      const user_id = result.rows[0].user_id;
+      pool.query('INSERT INTO eveningdone (user_id, date, message) VALUES ($1, $2, $3)', 
+      [user_id, new Date(), message], (err, result) => {
+        if (err) {
+          console.error('Error executing query:', err);
+          res.status(500).json({ message: 'Database query error' });
+        } else {
+        }
+      }); 
+    }
+  })
+})
+
+
+app.post('/memories', (req, res) => {
+  const user_id = req.body.theId;
+  pool.query('SELECT * FROM memories WHERE user_id = $1', [user_id], (err, result) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      res.status(500).json({ message: 'Database query error' });
+    } else {
+      res.status(200).json(result.rows); 
+    }
+  });
 });
 
 
+
+function deleteAllMorningPlanEntries() {
+  pool.query('DELETE FROM morningplan', (err, result) => {
+    if (err) {
+      console.error('Error executing query:', err);
+    } else {
+      console.log('All morningplan entries deleted at midnight.');
+    }
+  });
+}
+
+function deleteAllEveningDoneEntries() {
+  pool.query('DELETE FROM eveningdone', (err, result) => {
+    if (err) {
+      console.error('Error executing query:', err);
+    } else {
+      console.log('All eveningdone entries deleted at midnight.');
+    }
+  });
+}
+
+function moveMorningPlanEntriesToMemories() {
+  pool.query(
+    'INSERT INTO memories (user_id, date, message) ' +
+    'SELECT user_id, date, message FROM morningplan ' +
+    'WHERE (user_id, date) IN ' +
+    '(SELECT user_id, MAX(date) FROM morningplan GROUP BY user_id)',
+    (err, result) => {
+      if (err) {
+        console.error('Error executing query:', err);
+      } else {
+        console.log('Most recent morningplan entries moved to memories.');
+        deleteAllMorningPlanEntries();
+      }
+    }
+  );
+}
+
+function moveEveningDoneEntriesToMemories() {
+  pool.query(
+    'INSERT INTO memories (user_id, date, message) ' +
+    'SELECT user_id, date, message FROM eveningdone ' +
+    'WHERE (user_id, date) IN ' +
+    '(SELECT user_id, MAX(date) FROM eveningdone GROUP BY user_id)',
+    (err, result) => {
+      if (err) {
+        console.error('Error executing query:', err);
+      } else {
+        console.log('Most recent eveningdone entries moved to memories.');
+        deleteAllEveningDoneEntries();
+      }
+    }
+  );
+}
+
+
+cron.schedule('30 23 * * *', () => {
+  moveMorningPlanEntriesToMemories();
+});
 
 
 const port = process.env.PORT || 3000;
