@@ -236,7 +236,6 @@ app.post('/memories', (req, res) => {
 });
 
 
-
 function deleteAllMorningPlanEntries() {
   pool.query('DELETE FROM morningplan', (err, result) => {
     if (err) {
