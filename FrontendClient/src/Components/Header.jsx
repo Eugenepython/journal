@@ -62,13 +62,13 @@ async function showHistory(){
             body: JSON.stringify({journalWriter}), 
           });
           if (!response.ok) {
-            console.log('error')
+            console.log('error is annoying')
           } else {
             const data = await response.json();
             console.log(data);
           }
         } catch (error) {
-          console.error('Error:', error);
+          console.error('Eugenes Error:', error);
         }
       }
 
