@@ -1,5 +1,5 @@
 .body {
-  background-color: green;
+  background-color: #BB377D;
   display: flex;
   flex-direction: column;
   font-size: calc(10px + 2vmin);
@@ -18,20 +18,20 @@
 }
 
 .header {
-  background-color: red;
+  background-color: #7937AB;
   max-height: 20vh; 
   min-height: 20vh;
   margin: 2px;
 }
 
 .plan {
-  background-color: blue;
+  background-color: #772626;
   max-height: 40vh; 
   min-height: 40vh;
 }
 
 .recap {
-  background-color: yellow;
+  background-color: #D26565;
   max-height: 40vh; 
   min-height: 40vh;
 }
@@ -259,7 +259,7 @@
   text-align: center;
   text-decoration: none;
 
-  background-color: #3498db; 
+  background-color: #F904E0;
   color: #fff; 
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;

@@ -227,13 +227,13 @@ app.post('/memories', (req, res) => {
   const username = req.body.journalWriter;
   pool.query('SELECT * FROM users WHERE username = $1', [username], (err, result) => {
     if (err) {
-      console.error('Error executing query:', err);
+      console.error('Error executing query on username:', err);
       res.status(500).json({ message: 'Database query error' });
     } else if (result.rows.length > 0) {
       const user_id = result.rows[0].user_id;
       pool.query('SELECT * FROM memories WHERE user_id = $1', [user_id], (err, result) => {
         if (err) {
-          console.error('Error executing query:', err);
+          console.error('Error executing query on user_id:', err);
           res.status(500).json({ message: 'Database query error' });
         } else {
           res.status(200).json(result.rows); 
