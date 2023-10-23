@@ -11,7 +11,8 @@ const saltRounds = 10;
 const cron = require('node-cron');
 
 
-//console.log(process.env.FRONTEND_URL)
+const backendApiUrl = process.env.VITE_BACKEND_API_URL;
+
 
 const pool = new Pool({
   user: process.env.DB_USER,
@@ -299,9 +300,18 @@ function moveEveningDoneEntriesToMemories() {
 }
 
 
-cron.schedule('30 23 * * *', () => {
+app.get('/moveMorningPlanEntriesToMemories', (req, res) => {
   moveMorningPlanEntriesToMemories();
+  res.send('Move Morning Plan Entries to Memories triggered.');
 });
+
+app.get('/moveEveningDoneEntriesToMemories', (req, res) => {
+  moveEveningDoneEntriesToMemories();
+  res.send('Move Evening Done Entries to Memories triggered.');
+});
+
+
+
 
 
 const port = process.env.PORT || 3000;
