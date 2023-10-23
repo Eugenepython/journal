@@ -267,7 +267,7 @@ function deleteAllEveningDoneEntries() {
 
 function moveMorningPlanEntriesToMemories() {
   pool.query(
-    'INSERT INTO memories (user_id, date, message) ' +
+    'INSERT INTO memories (user_id, date, morningmessage) ' +
     'SELECT user_id, date, message FROM morningplan ' +
     'WHERE (user_id, date) IN ' +
     '(SELECT user_id, MAX(date) FROM morningplan GROUP BY user_id)',
@@ -284,7 +284,7 @@ function moveMorningPlanEntriesToMemories() {
 
 function moveEveningDoneEntriesToMemories() {
   pool.query(
-    'INSERT INTO memories (user_id, date, message) ' +
+    'INSERT INTO memories (user_id, date, eveningmessage) ' +
     'SELECT user_id, date, message FROM eveningdone ' +
     'WHERE (user_id, date) IN ' +
     '(SELECT user_id, MAX(date) FROM eveningdone GROUP BY user_id)',
