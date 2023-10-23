@@ -59,7 +59,7 @@ async function showHistory(){
           const response = await fetch(`${serverURL}/memories`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({theId}), 
+            body: JSON.stringify({journalWriter}), 
           });
           if (!response.ok) {
             console.log('error')
@@ -71,6 +71,7 @@ async function showHistory(){
           console.error('Error:', error);
         }
       }
+
 
 
 
