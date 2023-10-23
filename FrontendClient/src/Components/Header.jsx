@@ -17,6 +17,7 @@ function Header() {
     const {theId, setTheId, token, setToken, showEntryForm, setShowEntryForm, loggedIn, signInResult, setSignInResult, setLogin, setJournalWriter, journalWriter, setShowLoginForm, setShowSignUpForm, setShowBackButton, showSignUpForm, showLoginForm, showBackButton} = useContext(signInContext);
     
     const [quote, setQuote] = useState(stoicGratitudeEnthusiasmQuotes[randomNumber]);
+    const [history, setHistory] = useState([])
     
     const quoteIndex = dayOfYear - 1;
 //console.log(loggedIn + " !!!!!!!!!!!!!!!!!!!!!!!!")
@@ -65,18 +66,15 @@ async function showHistory(){
             console.log('error is annoying')
           } else {
             const data = await response.json();
-            console.log(data);
+            console.log(data[0]);
+            setHistory(data)
           }
         } catch (error) {
           console.error('Eugenes Error:', error);
         }
       }
 
-
-
-
-
-
+console.log(history)
 
 
   return (
