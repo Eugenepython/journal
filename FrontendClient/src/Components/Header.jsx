@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from 'react'
 import stoicGratitudeEnthusiasmQuotes from './Quotes';
-import { signInContext } from "../Components/MyContexts";
+import { signInContext, historyContext } from "../Components/MyContexts";
+import HistoryModal from '../Modals/HistoryModal';
 
 
 const now = new Date();
@@ -15,9 +16,9 @@ const formattedDate = new Intl.DateTimeFormat('en-US', options).format(now);
 
 function Header() {
     const {theId, setTheId, token, setToken, showEntryForm, setShowEntryForm, loggedIn, signInResult, setSignInResult, setLogin, setJournalWriter, journalWriter, setShowLoginForm, setShowSignUpForm, setShowBackButton, showSignUpForm, showLoginForm, showBackButton} = useContext(signInContext);
-    
+    const {openHistory, closeHistory, history, setHistory, displayHistory, setDisplayHistory} = useContext(historyContext);
     const [quote, setQuote] = useState(stoicGratitudeEnthusiasmQuotes[randomNumber]);
-    const [history, setHistory] = useState([])
+    
     
     const quoteIndex = dayOfYear - 1;
 //console.log(loggedIn + " !!!!!!!!!!!!!!!!!!!!!!!!")
@@ -66,15 +67,48 @@ async function showHistory(){
             console.log('error is annoying')
           } else {
             const data = await response.json();
-            console.log(data);
+            //console.log(data);
             setHistory(data)
+            setDisplayHistory(true)
           }
         } catch (error) {
           console.error('Eugenes Error:', error);
         }
       }
 
-console.log(history)
+
+
+  async function manipulateMorning(){
+    try {
+      const response = await fetch(`${serverURL}/moveMorningPlanEntriesToMemories`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (!response.ok) {
+        console.log('error is annoying')
+      } else {
+        
+      }
+    } catch (error) {
+      console.error('Eugenes Error:', error);
+    }
+  }
+
+  async function manipulateEvening(){
+    try {
+      const response = await fetch(`${serverURL}/moveEveningDoneEntriesToMemories`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (!response.ok) {
+        console.log('error is annoying')
+      } else {
+        
+      }
+    } catch (error) {
+      console.error('Eugenes Error:', error);
+    }
+  }
 
 
   return (
@@ -90,11 +124,17 @@ console.log(history)
                 <div className = 'logOutAndHistory'>
                     <button onClick = {logUserOut} className = 'logOut'>Log Out</button> 
                     <button onClick = {showHistory} className = 'history'>History</button>
+                    <button onClick = {manipulateMorning} className = 'history'>Morning</button>
+                    <button onClick = {manipulateEvening} className = 'history'>Evening</button>
                 </div>
                 : null }
         </div>
  
         <p>{quote}</p>
+        <HistoryModal
+    displayHistory={displayHistory}
+    closeHistory={closeHistory}
+    />
 
     </div>
     </>

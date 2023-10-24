@@ -28,7 +28,7 @@ async function saveMorning() {
       console.log('error')
     } else {
       const data = await response.json();
-      console.log(data);
+      //console.log(data);
     }
   } catch (error) {
     console.error('Error:', error);

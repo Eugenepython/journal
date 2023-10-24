@@ -175,6 +175,27 @@ app.post('/login', (req, res) => {
   });
 });
 
+app.post('/memories', (req, res) => {
+  const username = req.body.journalWriter;
+  pool.query('SELECT user_id FROM users WHERE username = $1', [username], (err, userResult) => {
+    if (err) {
+      console.error('Error executing query on username:', err);
+      res.status(500).json({ message: 'Database query error' });
+    } else if (userResult.rows.length > 0) {
+      const user_id = userResult.rows[0].user_id;
+      pool.query('SELECT * FROM memories WHERE user_id = $1', [user_id], (err, result) => {
+      if (err) {
+        console.error('Error executing query:', err);
+      } else {
+        console.log(result.rows); 
+        res.status(200).json(result.rows);
+      }
+    })
+    }
+    })
+  })
+
+
 
 
 app.post('/morningplan', (req, res) => {
@@ -223,57 +244,6 @@ app.post('/eveningdone', (req, res) => {
   })
 })
 
-app.post('/memories', (req, res) => {
-  const username = req.body.journalWriter;
-  
-  // Step 1: Retrieve the user_id using the provided username
-  pool.query('SELECT user_id FROM users WHERE username = $1', [username], (err, userResult) => {
-    if (err) {
-      console.error('Error executing query on username:', err);
-      res.status(500).json({ message: 'Database query error' });
-    } else if (userResult.rows.length > 0) {
-      const user_id = userResult.rows[0].user_id;
-      console.log("hurrahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-      
-      // Step 2: Retrieve the latest morningplan entry
-      pool.query(
-        'SELECT * FROM morningplan WHERE user_id = $1 ORDER BY morningplan_id DESC LIMIT 1',
-        [user_id],
-        (err, morningplanResult) => {
-          if (err) {
-            console.error('Error executing query on morningplan:', err);
-            res.status(500).json({ message: 'Database query error' });
-          } else if (morningplanResult.rows.length > 0) {
-            const latestMorningplanEntry = morningplanResult.rows[0];
-              console.log("hello")
-              console.log(latestMorningplanEntry)
-            // Step 3: Insert the latest morningplan entry into memories
-            pool.query(
-              'INSERT INTO memories (user_id, date, morningmessage) VALUES ($1, $2, $3) RETURNING *',
-              [user_id, latestMorningplanEntry.date, latestMorningplanEntry.message],
-              (err, insertResult) => {
-                if (err) {
-                  console.error('Error inserting data into memories:', err);
-                  res.status(500).json({ message: 'Database query error' });
-                } else {
-                  // Step 4: Respond with the inserted data
-                  const reversedEntry = insertResult.rows[0];
-                  console.log(reversedEntry.morningmessage)
-                  res.status(200).json({ message: 'Latest morningmessage saved to memories', data: reversedEntry });
-                }
-              }
-            );
-          } else {
-            res.status(404).json({ message: 'No morningplan entry found for the user.' });
-          }
-        }
-      );
-    } else {
-      res.status(404).json({ message: 'User not found.' });
-    }
-  });
-});
-
 
 
 function deleteAllMorningPlanEntries() {
@@ -299,9 +269,10 @@ function deleteAllEveningDoneEntries() {
 function moveMorningPlanEntriesToMemories() {
   pool.query(
     'INSERT INTO memories (user_id, date, morningmessage) ' +
-    'SELECT user_id, date, message FROM morningplan ' +
-    'WHERE (user_id, date) IN ' +
-    '(SELECT user_id, MAX(date) FROM morningplan GROUP BY user_id)',
+    'SELECT user_id, date, message ' +
+    'FROM morningplan m ' +
+    'WHERE morningplan_id IN ' +
+    '(SELECT MAX(morningplan_id) FROM morningplan WHERE user_id = m.user_id)',
     (err, result) => {
       if (err) {
         console.error('Error executing query:', err);
@@ -313,12 +284,15 @@ function moveMorningPlanEntriesToMemories() {
   );
 }
 
+
+
 function moveEveningDoneEntriesToMemories() {
   pool.query(
     'INSERT INTO memories (user_id, date, eveningmessage) ' +
-    'SELECT user_id, date, message FROM eveningdone ' +
-    'WHERE (user_id, date) IN ' +
-    '(SELECT user_id, MAX(date) FROM eveningdone GROUP BY user_id)',
+    'SELECT user_id, date, message ' +
+    'FROM eveningdone m ' +
+    'WHERE eveningdone_id IN ' +
+    '(SELECT MAX(eveningdone_id) FROM eveningdone WHERE user_id = m.user_id)',
     (err, result) => {
       if (err) {
         console.error('Error executing query:', err);

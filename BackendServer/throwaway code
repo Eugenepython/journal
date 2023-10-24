@@ -1,0 +1,30 @@
+
+const uniqueDates = new Set();
+
+
+const combinedMessages = {};
+
+history.forEach(item => {
+  uniqueDates.add(item.date);
+  if (!combinedMessages[item.date]) {
+    combinedMessages[item.date] = {
+      morningmessage: item.morningmessage || '',
+      eveningmessage: item.eveningmessage || '',
+    };
+  } else {
+    if (item.morningmessage) {
+      combinedMessages[item.date].morningmessage = item.morningmessage;
+    }
+    if (item.eveningmessage) {
+      combinedMessages[item.date].eveningmessage = item.eveningmessage;
+    }
+  }
+});
+
+const uniqueDatesArray = [...uniqueDates];
+const combinedHistory = uniqueDatesArray.map(date => ({
+  date,
+  ...combinedMessages[date],
+}));
+
+console.log(combinedHistory);

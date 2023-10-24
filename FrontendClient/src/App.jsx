@@ -4,7 +4,7 @@ import PlanForToday from './Components/PlanForToday'
 import Recap from './Components/Recap'
 import Entry from './Components/Entry'
 import MorningModal from './Modals/MorningModal'
-import {signInContext, morningContext, eveningContext} from './Components/MyContexts'
+import {signInContext, morningContext, eveningContext, historyContext} from './Components/MyContexts'
 import WhatDoneToday from './Components/WhatDoneToday'
 import EveningModal from './Modals/EveningModal'
 
@@ -26,10 +26,20 @@ const [confirmedMessage, setConfirmedMessage] = useState('')
 const [eveningMessage, setEveningMessage] = useState('')
 const [confirmedEveningMessage, setConfirmedEveningMessage] = useState('')
 const [theId, setTheId] = useState('')
+const [history, setHistory] = useState(null)
+const [displayHistory, setDisplayHistory] = useState(false)
+function closeHistory(){
+  setDisplayHistory(false)
+}
+function openHistory(){
+  setDisplayHistory(true)
+}
+
   
   return (
     <>
     <div className='body'>
+      <historyContext.Provider value = {{openHistory, closeHistory, history, setHistory, displayHistory, setDisplayHistory}}>
     <eveningContext.Provider value = {{confirmedEveningMessage, setConfirmedEveningMessage, eveningMessage, setEveningMessage}}>
     <morningContext.Provider value = {{morningMessage, setMorningMessage, confirmedMessage, setConfirmedMessage}}>
     <signInContext.Provider value={{
@@ -66,6 +76,7 @@ const [theId, setTheId] = useState('')
     </signInContext.Provider>
     </morningContext.Provider>
     </eveningContext.Provider>
+    </historyContext.Provider>
 
     </div>
     </>
