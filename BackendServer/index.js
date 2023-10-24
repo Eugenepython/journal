@@ -226,32 +226,49 @@ app.post('/eveningdone', (req, res) => {
 
 app.post('/memories', (req, res) => {
   const username = req.body.journalWriter;
-  pool.query(
-    'SELECT * FROM morningplan WHERE user_id = $1 ORDER BY timestamp_column DESC LIMIT 1',
-    [user_id],
-    (err, morningplanResult) => {
-      if (err) {
-        console.error('Error executing query on morningplan:', err);
-        res.status(500).json({ message: 'Database query error' });
-      } else if (morningplanResult.rows.length > 0) {
-        const latestMorningplanEntry = morningplanResult.rows[0];
-        pool.query(
-          'INSERT INTO memories (user_id, date, morningmessage) VALUES ($1, $2, $3)',
-          [user_id, latestMorningplanEntry.date, latestMorningplanEntry.morningmessage],
-          (err) => {
-            if (err) {
-              console.error('Error inserting data into memories:', err);
-              res.status(500).json({ message: 'Database query error' });
-            } else {
-              res.status(200).json({ message: 'Latest morningmessage saved to memories', data: latestMorningplanEntry });
-            }
+
+  // Step 1: Retrieve the user_id using the provided username
+  pool.query('SELECT user_id FROM users WHERE username = $1', [username], (err, userResult) => {
+    if (err) {
+      console.error('Error executing query on username:', err);
+      res.status(500).json({ message: 'Database query error' });
+    } else if (userResult.rows.length > 0) {
+      const user_id = userResult.rows[0].user_id;
+
+      // Step 2: Retrieve the latest morningplan entry
+      pool.query(
+        'SELECT * FROM morningplan WHERE user_id = $1 ORDER BY timestamp_column DESC LIMIT 1',
+        [user_id],
+        (err, morningplanResult) => {
+          if (err) {
+            console.error('Error executing query on morningplan:', err);
+            res.status(500).json({ message: 'Database query error' });
+          } else if (morningplanResult.rows.length > 0) {
+            const latestMorningplanEntry = morningplanResult.rows[0];
+
+            // Step 3: Insert the latest morningplan entry into memories
+            pool.query(
+              'INSERT INTO memories (user_id, date, morningmessage) VALUES ($1, $2, $3)',
+              [user_id, latestMorningplanEntry.date, latestMorningplanEntry.morningmessage],
+              (err) => {
+                if (err) {
+                  console.error('Error inserting data into memories:', err);
+                  res.status(500).json({ message: 'Database query error' });
+                } else {
+                  // Step 4: Respond with the inserted data
+                  res.status(200).json({ message: 'Latest morningmessage saved to memories', data: latestMorningplanEntry });
+                }
+              }
+            );
+          } else {
+            res.status(404).json({ message: 'No morningplan entry found for the user.' });
           }
-        );
-      } else {
-        res.status(404).json({ message: 'No morningplan entry found for the user.' });
-      }
+        }
+      );
+    } else {
+      res.status(404).json({ message: 'User not found.' });
     }
-  );  
+  });
 });
 
 
