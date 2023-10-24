@@ -66,7 +66,7 @@ async function showHistory(){
             console.log('error is annoying')
           } else {
             const data = await response.json();
-            console.log(data[0]);
+            console.log(data);
             setHistory(data)
           }
         } catch (error) {
