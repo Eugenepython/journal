@@ -13,7 +13,7 @@ const {journalWriter, setJournalWriter} = useContext(signInContext);
 function handleTextChange(event){
 setMorningMessage(event.target.value)
 }
-
+console.log(morningMessage)
 async function saveMorning() {
   setConfirmedMessage(morningMessage);
   closePlan();
@@ -23,7 +23,6 @@ async function saveMorning() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ morningMessage, journalWriter }), 
     });
-
     if (!response.ok) {
       console.log('error')
     } else {
@@ -48,7 +47,7 @@ function handleKeyPress(event){
     <>
     <div>
     <Modal 
-        className = "enterMorning"
+        className = "modal"
           isOpen={openPlan}
           onRequestClose={closePlan}
           contentLabel="Custom Modal"
@@ -65,9 +64,9 @@ function handleKeyPress(event){
             rows="20"
             cols="50"
           ></textarea>
-          <button className = 'saveMorning' onClick ={saveMorning}>Save</button>
           </div>
-          <button onClick = {closePlan} >Close this Modal</button>
+          <button className = 'saveModal' onClick ={saveMorning}>Save</button>
+          <button className = 'closeModal' onClick = {closePlan} >Close this Modal</button>
           </Modal>
     </div>
     </>

@@ -124,8 +124,8 @@ async function showHistory(){
                 <div className = 'logOutAndHistory'>
                     <button onClick = {logUserOut} className = 'logOut'>Log Out</button> 
                     <button onClick = {showHistory} className = 'history'>History</button>
-                    <button onClick = {manipulateMorning} className = 'history'>Morning</button>
-                    <button onClick = {manipulateEvening} className = 'history'>Evening</button>
+                    {/* <button onClick = {manipulateMorning} className = 'history'>Morning</button> */}
+                    {/* <button onClick = {manipulateEvening} className = 'history'>Evening</button>  */}       
                 </div>
                 : null }
         </div>

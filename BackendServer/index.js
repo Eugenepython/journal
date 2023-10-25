@@ -202,6 +202,7 @@ app.post('/morningplan', (req, res) => {
   //console.log(req.body)
   const username = req.body.journalWriter;
   const message = req.body.morningMessage;
+  console.log(message)
   pool.query('SELECT * FROM users WHERE username = $1', [username], (err, result) => {
     if (err) {
       console.error('Error executing query:', err);

@@ -4,8 +4,6 @@ import { historyContext } from "../Components/MyContexts";
 import formatTimestamp from '../Modals/DateCalculator';
 
 
-
-
 function HistoryModal({ }) {
     
 const {openHistory, history, setHistory, displayHistory, setDisplayHistory, closeHistory} = useContext(historyContext);
@@ -51,10 +49,16 @@ const formattedHistory = combinedHistory.map(item => ({
 
 const historyShow = formattedHistory ?  formattedHistory.map (item => {
     return (
-        <div>
+        <div className = 'historyItem'>
         <p>{item.date.date}</p>
-        <p>{item.morningmessage}</p>
-        <p>{item.eveningmessage}</p>
+        <div className = 'historyMorning'>
+        <p>Day Aims</p>
+        <p style={{ whiteSpace: 'pre-wrap' }}> {item.morningmessage}</p>
+        </div>
+        <div className = 'historyEvening'>
+        <p>Day Achievements</p>
+        <p style={{ whiteSpace: 'pre-wrap' }}>{item.eveningmessage}</p>
+        </div>
         </div>
     )
 }) : null;
@@ -65,13 +69,13 @@ const historyShow = formattedHistory ?  formattedHistory.map (item => {
     <>
     <div>
     <Modal 
-    className = "enterMorning"
+        className = "modal"
           isOpen={displayHistory}
           onRequestClose={closeHistory}
           contentLabel="Custom Modal"
         >
            {historyShow}
-     <button onClick = {closeHistory}>Close</button>
+     <button className = 'closeModal' onClick = {closeHistory}>Close</button>
           </Modal>
 
     </div>

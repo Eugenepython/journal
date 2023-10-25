@@ -49,7 +49,7 @@ function handleKeyPress(event){
     <>
     <div>
     <Modal 
-        className = "enterMorning"
+        className = "modal"
           isOpen={openDone}
           onRequestClose={closeDone}
           contentLabel="Custom Modal"
@@ -66,12 +66,15 @@ function handleKeyPress(event){
             rows="20"
             cols="50"
           ></textarea>
+          </div>
           <button 
-          className = 'saveMorning' 
+          className = 'saveModal' 
           onClick ={saveEvening}
           >Save</button>
-          </div>
-          <button onClick = {closeDone} >Close this Modal</button>
+          <button 
+          className = 'closeModal' 
+          onClick = {closeDone} 
+          >Close this Modal</button>
           </Modal>
 
     </div>

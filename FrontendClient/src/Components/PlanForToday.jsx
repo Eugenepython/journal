@@ -4,7 +4,6 @@ import EveningPlan from '../Modals/EveningModal'
 import { morningContext } from "../Components/MyContexts";
 
 
-
 function PlanForToday() {
 
 const [openPlan, setOpenPlan] = useState(false);
@@ -20,9 +19,6 @@ function closePlan(){
   setOpenPlan(false);
  // setMorningMessage('')
   }
-
-
-
 
   return (
     <>
