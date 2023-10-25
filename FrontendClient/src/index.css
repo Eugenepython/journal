@@ -102,10 +102,27 @@
   align-items: center;
   font-size: calc(10px + 2vmin);
   color: white;
-  flex: 1;
   background-color: #D26565;
   margin: 2px;
-  overflow: auto; 
+  overflow: auto;
+  max-height: 90vh; 
+}
+
+.modalHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 50%;
+}
+
+.history-heading {
+  font-size: 36px;
+  color: #333; 
+  background-color: #F5E1A1; 
+  padding: 10px 20px; 
+  border-radius: 10px; 
+  font-weight: bold;
+  text-transform: uppercase; 
 }
 
 
@@ -207,18 +224,35 @@
 
 
 .closeModal {
-  background-color: #4CAF50; 
-  color: white; 
-  border: none; 
-  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 10px 2px;
-  cursor: pointer; 
-  border-radius: 4px; 
+  font-size: 2vw; 
+  width: 20%; 
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
+  border-radius: 4px;
+  display: inline-block; 
 }
+
+/* Optional: Add media queries for further adjustments on different screen sizes */
+@media screen and (max-width: 768px) {
+  .closeModal {
+    font-size: 3vw;
+    width: 40%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .closeModal {
+    font-size: 4vw;
+    width: 60%;
+  }
+}
+
 
 .saveModal {
   background-color: #c7b727; 

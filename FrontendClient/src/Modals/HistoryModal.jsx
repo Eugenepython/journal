@@ -74,6 +74,11 @@ const historyShow = formattedHistory ?  formattedHistory.map (item => {
           onRequestClose={closeHistory}
           contentLabel="Custom Modal"
         >
+          <div className = 'modalHeader'>
+          <h1 className = 'history-heading'>History</h1>
+          <button className = 'closeModal' onClick = {closeHistory}>Close</button>
+          </div>
+          
            {historyShow}
      <button className = 'closeModal' onClick = {closeHistory}>Close</button>
           </Modal>
