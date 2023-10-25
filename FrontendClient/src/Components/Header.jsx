@@ -119,7 +119,7 @@ async function showHistory(){
                     <p className = 'journalWriter'>{journalWriter}</p>
                     <p className = 'date'>{formattedDate}</p>
                 </div>
-                <p className = 'headTitle'>Journal thing</p>
+                <p className = 'headTitle'>Journal</p>
                 { loggedIn ? 
                 <div className = 'logOutAndHistory'>
                     <button onClick = {logUserOut} className = 'logOut'>Log Out</button> 
